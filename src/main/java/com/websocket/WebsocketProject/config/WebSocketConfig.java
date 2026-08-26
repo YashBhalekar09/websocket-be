@@ -21,10 +21,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //for particular endpoint
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("https://websocket-fe-g6p2.onrender.com");
-        
+        registry.addEndpoint("/ws").setAllowedOriginPatterns
+                ("https://websocket-fe-g6p2.onrender.com");
         //for all endpoints
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("*");
+
+        //registry.addEndpoint("/ws").setAllowedOriginPatterns("*");
 
     }
 
