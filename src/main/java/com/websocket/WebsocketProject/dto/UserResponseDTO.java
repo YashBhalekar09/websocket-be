@@ -6,15 +6,17 @@ public class UserResponseDTO {
     private String username;
     private String email;
     private boolean online;
+    private String profilePicture;
 
     public UserResponseDTO() {
     }
 
-    public UserResponseDTO(Long userId, String username, String email, boolean online) {
+    public UserResponseDTO(Long userId, String username, String email, boolean online, String profilePicture) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.online = online;
+        this.profilePicture = profilePicture;
     }
 
     public Long getUserId() {return userId;}
@@ -32,4 +34,8 @@ public class UserResponseDTO {
     public boolean isOnline() {return online;}
 
     public void setOnline(boolean online) {this.online = online;}
+
+    public String getProfilePicture() {return profilePicture;}
+
+    public void setProfilePicture(String profilePicture) {this.profilePicture = profilePicture;}
 }

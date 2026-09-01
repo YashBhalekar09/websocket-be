@@ -45,7 +45,9 @@ public class SecurityConfig {
                         "/api-docs/**",
                         // Swagger resources
                         "/swagger-resources/**",
-                        "/webjars/**"
+                        "/webjars/**",
+                        "/api/v1/user/refresh-token",
+                        "/uploads/**"
                       ).permitAll().anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

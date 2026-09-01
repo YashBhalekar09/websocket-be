@@ -27,9 +27,7 @@ public class JWTChannelInterceptor implements ChannelInterceptor {
     private final UserPresenceService userPresenceService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    // =========================================
     // SESSION -> AUTHENTICATION
-    // =========================================
     private final Map<String, UsernamePasswordAuthenticationToken> authenticatedUsers = new ConcurrentHashMap<>();
 
 
@@ -109,7 +107,7 @@ public class JWTChannelInterceptor implements ChannelInterceptor {
                 // =========================================
                 userPresenceService.updateOnlineStatus(userId, true);
                 messagingTemplate.convertAndSend(
-                        "/topic/user-status", new UserResponseDTO(userId, username,null, true)
+                        "/topic/user-status", new UserResponseDTO(userId, username,null, true,null)
                 );
 
                 System.out.println("=================================");
@@ -167,7 +165,7 @@ public class JWTChannelInterceptor implements ChannelInterceptor {
                         messagingTemplate.convertAndSend(
                                 "/topic/user-status",
                                 new UserResponseDTO(
-                                        userId, authentication.getName(),null, false)
+                                        userId, authentication.getName(),null, false,null)
                         );
                         System.out.println("User OFFLINE: " + authentication.getName() + " | userId: " + userId);
                     } else {

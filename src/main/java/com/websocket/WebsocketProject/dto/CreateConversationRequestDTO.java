@@ -8,6 +8,7 @@ public class CreateConversationRequestDTO {
 
     private List<Long> userIds;
     private ConversationType type;
+    private String groupName;
 
     public ConversationType getType() {return type;}
 
@@ -16,4 +17,8 @@ public class CreateConversationRequestDTO {
     public List<Long> getUserIds() {return userIds;}
 
     public void setUserIds(List<Long> userIds) {this.userIds = userIds;}
+
+    public String getGroupName() {return groupName;}
+
+    public void setGroupName(String groupName) {this.groupName = groupName;}
 }

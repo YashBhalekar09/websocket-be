@@ -19,13 +19,17 @@ public class Conversation {
     @Column(nullable = false)
     private ConversationType conversationType;
 
+    @Column
+    private String name;
+
     public Conversation() {
     }
 
-    public Conversation(Long id, LocalDateTime createdAt, ConversationType conversationType) {
+    public Conversation(Long id, LocalDateTime createdAt, ConversationType conversationType, String name) {
         this.id = id;
         this.createdAt = createdAt;
         this.conversationType = conversationType;
+        this.name = name;
     }
 
     public Long getId() {return id;}
@@ -39,4 +43,8 @@ public class Conversation {
     public ConversationType getConversationType() {return conversationType;}
 
     public void setConversationType(ConversationType conversationType) {this.conversationType = conversationType;}
+
+    public String getName() {return name;}
+
+    public void setName(String name) {this.name = name;}
 }

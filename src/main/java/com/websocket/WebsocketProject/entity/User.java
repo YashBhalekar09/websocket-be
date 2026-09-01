@@ -22,6 +22,9 @@ public class User {
     @Column(nullable = false)
     private boolean online = false;
 
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
     public Long getId() {return id;}
 
     public void setId(Long id) {this.id = id;}
@@ -41,4 +44,8 @@ public class User {
     public boolean isOnline() {return online;}
 
     public void setOnline(boolean online) {this.online = online;}
+
+    public String getProfilePicture() {return profilePicture;}
+
+    public void setProfilePicture(String profilePicture) {this.profilePicture = profilePicture;}
 }

@@ -1,13 +1,19 @@
 package com.websocket.WebsocketProject.controller;
 
+import com.websocket.WebsocketProject.dto.ConversationResponseDTO;
+import com.websocket.WebsocketProject.dto.GroupMemberUpdateRequestDTO;
 import com.websocket.WebsocketProject.dto.MessageResponseDTO;
+import com.websocket.WebsocketProject.dto.MessageStatusRequestDTO;
 import com.websocket.WebsocketProject.entity.ChatMessage;
 import com.websocket.WebsocketProject.service.ConversationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
@@ -29,53 +35,15 @@ public class ChatMessageController {
     public void sendMessage(@DestinationVariable Long conversationId,
             ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
 
-        System.out.println(
-                "===== CHAT MESSAGE RECEIVED ====="
-        );
-
-        System.out.println(
-                "Conversation ID : " + conversationId
-        );
-
-        System.out.println(
-                "Session ID : " +
-                        headerAccessor.getSessionId()
-        );
-
-        System.out.println(
-                "Session attributes : " +
-                        headerAccessor.getSessionAttributes()
-        );
-
         // Get authenticated user from STOMP session
-        String username =
-                (String) headerAccessor
-                        .getSessionAttributes()
-                        .get("username");
+        String username = (String) headerAccessor
+                        .getSessionAttributes().get("username");
 
-        Long userId =
-                (Long) headerAccessor
-                        .getSessionAttributes()
-                        .get("userId");
-
-        System.out.println(
-                "Username : " + username
-        );
-
-        System.out.println(
-                "User ID : " + userId
-        );
-
-        System.out.println(
-                "Content : " +
-                        chatMessage.getContent()
-        );
+        Long userId = (Long) headerAccessor
+                        .getSessionAttributes().get("userId");
 
         if (username == null || userId == null) {
-
-            throw new IllegalArgumentException(
-                    "WebSocket user is not authenticated"
-            );
+            throw new IllegalArgumentException("WebSocket user is not authenticated");
         }
 
         // Save message
@@ -86,21 +54,30 @@ public class ChatMessageController {
                         username
                 );
 
-        System.out.println(
-                "Message saved with ID : " +
-                        response.getId()
-        );
-
         // Broadcast message
         messagingTemplate.convertAndSend(
                 "/topic/conversations/" +
-                        conversationId,
-                response
-        );
-
-        System.out.println(
-                "Message broadcasted to conversation : " +
-                        conversationId
+                        conversationId, response
         );
     }
+
+    @MessageMapping("/message/delivered")
+    public void messageDelivered(MessageStatusRequestDTO request) {
+
+        conversationService.markMessageDelivered(
+                request.getMessageId(),
+                request.getUsername()
+        );
+    }
+
+    @MessageMapping("/conversation/read")
+    public void markConversationAsRead(
+            MessageStatusRequestDTO request) {
+
+        conversationService.markConversationMessagesAsRead(
+                request.getConversationId(),
+                request.getUsername()
+        );
+    }
+
 }
