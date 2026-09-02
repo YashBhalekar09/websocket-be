@@ -1,6 +1,7 @@
 package com.websocket.WebsocketProject.controller;
 
 import com.websocket.WebsocketProject.dto.LoginResponseDTO;
+import com.websocket.WebsocketProject.dto.OtpLoginResponseDTO;
 import com.websocket.WebsocketProject.dto.TokenResponseDTO;
 import com.websocket.WebsocketProject.dto.UserResponseDTO;
 import com.websocket.WebsocketProject.entity.LoginRequest;
@@ -10,6 +11,7 @@ import com.websocket.WebsocketProject.repository.UserRepository;
 import com.websocket.WebsocketProject.service.JwtService;
 import com.websocket.WebsocketProject.service.RefreshTokenService;
 import com.websocket.WebsocketProject.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,10 +73,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(
+    public ResponseEntity<OtpLoginResponseDTO> login(
             @RequestBody LoginRequest request) {
 
-        LoginResponseDTO response =
+        OtpLoginResponseDTO response =
                 userService.login(request.getEmail(), request.getPassword());
 
         return ResponseEntity.ok(response);
@@ -125,5 +127,14 @@ public class AuthController {
     @GetMapping("/all-users")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<LoginResponseDTO> verifyOtp(@RequestParam String email,
+                                                      @RequestParam String otp, HttpServletRequest request) {
+
+        LoginResponseDTO response = userService.verifyOtp(email, otp, request);
+
+        return ResponseEntity.ok(response);
     }
 }
